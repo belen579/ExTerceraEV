@@ -6,11 +6,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.ViewModel
 import com.example.ex_terceraev.ui.Data.Usuario
-import com.example.ex_terceraev.ui.Data.getListaclass
 import com.example.ex_terceraev.ui.Data.getListaclassUsuario
 import java.io.File
 
@@ -35,10 +32,15 @@ class LoginViewModel(val context: Context) :ViewModel() {
 
     var banderacambio by mutableStateOf(false)
 
+    var checkedall by mutableStateOf(false)
+
+
 
     fun onConvert() {
         banderacambio = !banderacambio
     }
+
+    var listausuariosseleccionados = mutableStateListOf<Usuario>()
 
 
     var listausuarios = mutableStateListOf<Usuario>()
@@ -72,8 +74,10 @@ class LoginViewModel(val context: Context) :ViewModel() {
             showAlertDialog(context, "Alerta", "La contraseña tiene que tener más de 6 caracteres")
             correcto = false
 
+
         } else {
-            showAlertDialog(context, "Alerta", "Contraseña guardada correctamente")
+
+           // showAlertDialog(context, "Alerta", "Puede acceder")
             correcto = true
         }
         return correcto
@@ -92,12 +96,15 @@ class LoginViewModel(val context: Context) :ViewModel() {
 
     fun Guardarusuario(usuario: Usuario) {
         val file = File(context.filesDir, nombreArchivo)
-        file.appendText("${usuario.usuario}, ${usuario.contraseña}")
+        file.appendText("${usuario.usuario}, ${usuario.contraseña} \n")
+
+        listausuarios.add(usuario)
+
 
         println(usuario.toString())
         println("Usuario guardado: ${usuario.usuario}, Contraseña: ${usuario.contraseña}")
         // Mostrar el diálogo después de guardar el usuario
-        showDialog.value = true
+       // showDialog.value = true
 
     }
 
@@ -117,6 +124,39 @@ class LoginViewModel(val context: Context) :ViewModel() {
     }
 
 
+
+
+        fun seleccionartodosloscheck(){
+            listausuarios.forEachIndexed { index, usuario ->
+                listausuarios[index] = usuario.copy(seleccionado = true)
+            }
+
+         //   listausuariosseleccionados.addAll(listausuarios)
+
+
+        }
+
+        fun cleartodosloscheck(){
+            listausuarios.forEachIndexed { index, usuario ->
+                listausuarios[index] = usuario.copy(seleccionado = false)
+            }
+
+          //  listausuariosseleccionados.removeAll(listausuarios)
+        }
+
+
+    fun verificarContraseña(nombre: String, contraseña: String): Boolean {
+        val usuario = listausuarios.find { it.usuario == nombre }
+        return usuario?.contraseña == contraseña
+    }
+
+
+
+
+
+
+
+
     fun borrarusuario(usuario:Usuario){
         listausuarios.remove(usuario)
     }
@@ -133,6 +173,18 @@ class LoginViewModel(val context: Context) :ViewModel() {
             listausuarios[index] = listausuarios[index].copy(seleccionado = !usuario.seleccionado)
         }
     }
+
+
+    private fun guardarUsuariosEnArchivo() {
+        val file = File(context.filesDir, nombreArchivo)
+        file.bufferedWriter().use { out ->
+            listausuarios.forEach { usuario ->
+                out.write("${usuario.usuario},${usuario.contraseña}\n")
+            }
+        }
+    }
+
+
 
 
 }

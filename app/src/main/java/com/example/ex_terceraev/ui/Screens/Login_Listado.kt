@@ -18,7 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
@@ -44,7 +44,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.ex_terceraev.ui.Data.Producto
 import com.example.ex_terceraev.ui.Data.Usuario
 import com.example.ex_terceraev.ui.Navigation.Screens
 
@@ -80,8 +79,12 @@ fun loginlistado(viewModel: LoginViewModel) {
                 Spacer(modifier = Modifier.padding(10.dp))
 
                 Button(onClick = {
-                    if (viewModel.comprobarcontraseña(viewModel.password, context)) {
+                    if (viewModel.comprobarcontraseña(viewModel.password, context)
+                       /* && viewModel.verificarContraseña(viewModel.usuario, viewModel.password)*/) {
+                        viewModel.Guardarusuario(Usuario(viewModel.usuario, viewModel.password, false))
                         viewModel.onConvert()
+
+
                        // navController.navigate(route = Screens.paginaprincipal.route)
 
                     }
@@ -100,7 +103,7 @@ fun loginlistado(viewModel: LoginViewModel) {
 
     if(viewModel.banderacambio){
         Column(
-            modifier= Modifier.padding(top =50.dp)
+            modifier= Modifier.padding(top =70.dp)
 
         ) {
             Column {
@@ -198,7 +201,7 @@ fun checkboxusuario(usuario: Usuario, viewModel: LoginViewModel) {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun presentacionScafold(viewModel: LoginViewModel){
+fun presentacionScafold(viewModel: LoginViewModel, navigation: NavController){
 
     var checkstate by rememberSaveable {
         mutableStateOf(false)
@@ -207,29 +210,60 @@ fun presentacionScafold(viewModel: LoginViewModel){
    Scaffold(
       topBar = { TopAppBar(title = { "Usuario" }, colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor= MaterialTheme.colorScheme.primary),
 
-      actions={
-          IconButton(onClick = {viewModel.onConvert()}){
+      actions= {
+          IconButton(onClick = { viewModel.onConvert() }) {
               //  navController.navigate(route= Screens.confirmacion.route)}) {
               Icon(Icons.Default.Refresh, contentDescription = null, tint = Color.Black)
           }
-          IconButton(onClick = {viewModel.onConvert()}){
+          IconButton(onClick = { viewModel }) {
               //  navController.navigate(route= Screens.confirmacion.route)}) {
               Icon(Icons.Default.Add, contentDescription = null, tint = Color.Black)
           }
-          IconButton(onClick = {viewModel.onConvert()}){
+          IconButton(onClick = { viewModel }) {
               //  navController.navigate(route= Screens.confirmacion.route)}) {
               Icon(Icons.Default.Delete, contentDescription = null, tint = Color.Black)
           }
 
-          Checkbox(checked =checkstate , onCheckedChange ={ischecked ->
-             checkstate= ischecked
+          Checkbox(checked = viewModel.checkedall, onCheckedChange = { ischecked ->
+              viewModel.checkedall = ischecked
 
-          } )
+              if (ischecked) {
+                  viewModel.seleccionartodosloscheck()
+
+              } else {
+                  viewModel.cleartodosloscheck()
+              }
+
+              navigation.navigate(route = Screens.activityunica.route)
+
+
+          })
+
+
       }
 
 
 
-      )}
+
+
+
+
+      )},
+
+
+       bottomBar = {
+           if(viewModel.banderacambio){
+               BottomAppBar(
+                   modifier = Modifier.fillMaxWidth(),
+
+                   ) {
+                   Text(text = "Numero de usuarios ${viewModel.listausuarios.size}")
+               }
+
+           }
+
+       }
+
    ) {
        loginlistado(viewModel)
    }
