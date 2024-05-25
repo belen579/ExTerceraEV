@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.example.ex_terceraev.ui.Data.Producto
 import com.example.ex_terceraev.ui.Data.Usuario
 import com.example.ex_terceraev.ui.Data.getListaclassUsuario
 import java.io.File
@@ -38,7 +39,6 @@ class LoginViewModel(val context: Context) :ViewModel() {
     var contadorusuarios by mutableStateOf(3)
 
 
-
     fun onConvert() {
         banderacambio = !banderacambio
     }
@@ -50,6 +50,7 @@ class LoginViewModel(val context: Context) :ViewModel() {
 
     init {
         listausuarios.addAll(getListaclassUsuario())
+        guardarUsuarios(listausuarios, context)
 
     }
 
@@ -70,13 +71,16 @@ class LoginViewModel(val context: Context) :ViewModel() {
     }
 
 
-    fun comprobarcontraseñaentrelalista(usuario:String, password:String, context: Context ):Boolean{
+    fun comprobarcontraseñaentrelalista(
+        usuario: String,
+        password: String,
+        context: Context
+    ): Boolean {
         var acceso by mutableStateOf(false)
 
-        listausuarios.forEach{
-            user ->
-            if(user.usuario== usuario && user.contraseña== password){
-                acceso= true
+        listausuarios.forEach { user ->
+            if (user.usuario == usuario && user.contraseña == password) {
+                acceso = true
                 Toast.makeText(context, "Contraseña correcta", Toast.LENGTH_SHORT).show()
 
             }
@@ -84,13 +88,23 @@ class LoginViewModel(val context: Context) :ViewModel() {
 
         }
 
-        Toast.makeText(context, "Contraseña incorrecta le quedan $contadorusuarios intentos", Toast.LENGTH_SHORT).show()
-        contadorusuarios--
-        if(contadorusuarios==0){
-            Toast.makeText(context, "No le quedan intentos", Toast.LENGTH_SHORT).show()
+        if(acceso== false){
+            Toast.makeText(
+                context,
+                "Contraseña incorrecta le quedan $contadorusuarios intentos",
+                Toast.LENGTH_SHORT
+            ).show()
+            contadorusuarios--
+            if (contadorusuarios == 0) {
+                Toast.makeText(context, "No le quedan intentos", Toast.LENGTH_SHORT).show()
+            }
+
         }
 
-return acceso
+
+
+
+        return acceso
     }
 
 
@@ -104,7 +118,7 @@ return acceso
 
         } else {
 
-           // showAlertDialog(context, "Alerta", "Puede acceder")
+            // showAlertDialog(context, "Alerta", "Puede acceder")
             correcto = true
         }
         return correcto
@@ -123,15 +137,16 @@ return acceso
 
     fun Guardarusuario(usuario: Usuario) {
         val file = File(context.filesDir, nombreArchivo)
+        listausuarios.add(usuario)
         file.appendText("${usuario.usuario}, ${usuario.contraseña} \n")
 
-        listausuarios.add(usuario)
+
 
 
         println(usuario.toString())
         println("Usuario guardado: ${usuario.usuario}, Contraseña: ${usuario.contraseña}")
         // Mostrar el diálogo después de guardar el usuario
-       // showDialog.value = true
+        // showDialog.value = true
 
     }
 
@@ -146,30 +161,28 @@ return acceso
 
         }
 
-        println(  Usuario(usuario, password, false))
+        println(Usuario(usuario, password, false))
 
     }
 
 
-
-
-        fun seleccionartodosloscheck(){
-            listausuarios.forEachIndexed { index, usuario ->
-                listausuarios[index] = usuario.copy(seleccionado = true)
-            }
-
-         //   listausuariosseleccionados.addAll(listausuarios)
-
-
+    fun seleccionartodosloscheck() {
+        listausuarios.forEachIndexed { index, usuario ->
+            listausuarios[index] = usuario.copy(seleccionado = true)
         }
 
-        fun cleartodosloscheck(){
-            listausuarios.forEachIndexed { index, usuario ->
-                listausuarios[index] = usuario.copy(seleccionado = false)
-            }
+        //   listausuariosseleccionados.addAll(listausuarios)
 
-          //  listausuariosseleccionados.removeAll(listausuarios)
+
+    }
+
+    fun cleartodosloscheck() {
+        listausuarios.forEachIndexed { index, usuario ->
+            listausuarios[index] = usuario.copy(seleccionado = false)
         }
+
+        //  listausuariosseleccionados.removeAll(listausuarios)
+    }
 
 
     fun verificarContraseña(nombre: String, contraseña: String): Boolean {
@@ -178,20 +191,13 @@ return acceso
     }
 
 
-
-
-
-
-
-
-    fun borrarusuario(usuario:Usuario){
+    fun borrarusuario(usuario: Usuario) {
         listausuarios.remove(usuario)
     }
 
-    fun añadirusuario(usuario:Usuario){
+    fun añadirusuario(usuario: Usuario) {
         listausuarios.add(usuario)
     }
-
 
 
     fun toggleSeleccion(usuario: Usuario) {
@@ -212,6 +218,19 @@ return acceso
     }
 
 
+    fun usuarioToString(usuario: Usuario): String {
+        return "${usuario.usuario} ${usuario.contraseña}"
+    }
+
+    fun guardarUsuarios(usuarios: List<Usuario>, context: Context) {
+
+        var file = File(context.filesDir, nombreArchivo)
+        file.printWriter().use { out ->
+            listausuarios.forEach { usuario ->
+                out.println(usuarioToString(usuario))
+            }
+        }
 
 
+    }
 }
