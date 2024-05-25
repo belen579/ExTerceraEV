@@ -1,7 +1,11 @@
 package com.example.ex_terceraev.ui.Screens
 
+import android.R
 import android.annotation.SuppressLint
+import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -40,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.ex_terceraev.ui.Data.Producto
@@ -208,6 +213,7 @@ fun listaitems(viewModel: ProductoViewModel, producto: Producto, editarnombre:(S
                 if(checkedstate){
                     viewModel.sumarproducto(producto)
                     viewModel.añadircontador()
+
                 }else{
                     viewModel.restarproducto(producto)
                     viewModel.restarcontador()
@@ -224,12 +230,20 @@ fun listaitems(viewModel: ProductoViewModel, producto: Producto, editarnombre:(S
 
             }
             Spacer(modifier = Modifier.weight(1f))
+            Image(painter = painterResource(id= R.drawable.ic_delete), contentDescription = "", modifier = Modifier.clickable {
+                Toast.makeText(context, " Ha clicado en eliminar", Toast.LENGTH_SHORT).show()
+
+            })
             IconButton(onClick = { /*viewModel.restarcontador()
                 viewModel.decrementarContador(producto)*/
                 viewModel.borrarproductos(producto)
             viewModel.eliminarProducto(producto.nombre, context)}) {
                 Icon(Icons.Default.Delete, contentDescription = null, tint = Color.Black)
             }
+            Image(painter =painterResource(id= android.R.drawable.ic_menu_edit), contentDescription = "", modifier = Modifier.clickable {
+                Toast.makeText(context, " Ha clicado en Editar", Toast.LENGTH_SHORT).show()
+
+            })
 
 
             Spacer(modifier = Modifier.weight(1f))

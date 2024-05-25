@@ -53,8 +53,8 @@ fun login (navController: NavController,viewModel: LoginViewModel){
         Button(onClick = {if(viewModel.comprobarcontraseñaentrelalista(viewModel.usuario, viewModel.password, context)
 
             ){
-           // navController.navigate(route= Screens.listadoitems.route)
-            navController.navigate(route = Screens.paginaprincipal.route)
+           navController.navigate(route= Screens.listadoitems.route)
+          //  navController.navigate(route = Screens.paginaprincipal.route)
 
         }
                                                                                         }

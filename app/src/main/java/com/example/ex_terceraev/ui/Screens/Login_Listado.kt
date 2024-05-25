@@ -1,6 +1,8 @@
 package com.example.ex_terceraev.ui.Screens
 
 import android.annotation.SuppressLint
+import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -40,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -173,7 +176,10 @@ fun checkboxusuario(usuario: Usuario, viewModel: LoginViewModel) {
                 Text(text = "${usuario.contraseña}")
 
             }
+            Image(painter =painterResource(id= android.R.drawable.ic_menu_edit), contentDescription = "", modifier = Modifier.clickable {
+                Toast.makeText(context, " Ha clicado en Editar", Toast.LENGTH_SHORT).show()
 
+            })
             IconButton(onClick = {
                 viewModel.borrarusuario(usuario)}) {
                 Icon(Icons.Default.Delete, contentDescription = null, tint = Color.Black)
@@ -181,6 +187,11 @@ fun checkboxusuario(usuario: Usuario, viewModel: LoginViewModel) {
 
 
             Spacer(modifier = Modifier.weight(1f))
+            
+            Image(painter =painterResource(id= android.R.drawable.ic_delete), contentDescription = "", modifier = Modifier.clickable {
+                Toast.makeText(context, " Ha clicado en eliminar", Toast.LENGTH_SHORT).show()
+
+            })
             IconButton(onClick = { viewModel.añadirusuario(usuario)
                }) {
                 Icon(Icons.Default.Add, contentDescription = null, tint = Color.Black)

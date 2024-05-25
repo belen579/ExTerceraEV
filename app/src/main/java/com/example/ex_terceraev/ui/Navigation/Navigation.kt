@@ -30,12 +30,12 @@ fun Navigation(){
        composable(route = Screens.registro.route) {
             registrarse(navController,viewModel) //Nombre de la función composable a la que navegar
         }
-/*
+
      composable(route = Screens.listadoitems.route) {
          items(viewModelProducto,navController,viewModel  ) //Nombre de la función composable a la que navegar
         }
 
-*/
+
 
         composable(route = Screens.paginaprincipal.route) {
             scaffold(viewModelProducto,navController ) //Nombre de la función composable a la que navegar
