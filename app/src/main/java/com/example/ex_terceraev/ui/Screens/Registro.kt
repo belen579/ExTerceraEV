@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.ex_terceraev.ui.Data.Usuario
 import com.example.ex_terceraev.ui.Navigation.Screens
+import com.example.ex_terceraev.ui.viewmodel.LoginViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)

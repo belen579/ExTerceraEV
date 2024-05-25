@@ -8,4 +8,6 @@ sealed class  Screens(val route: String) {
     object  paginaprincipal: Screens("Paginaprincipal")
 
     object activityunica : Screens ("Login_Listado")
+
+    object listadoitems : Screens ("Añadir_modificar_borrar")
 }

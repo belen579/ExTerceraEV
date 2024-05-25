@@ -1,7 +1,8 @@
-package com.example.ex_terceraev.ui.Screens
+package com.example.ex_terceraev.ui.viewmodel
 
 import android.app.AlertDialog
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -34,6 +35,8 @@ class LoginViewModel(val context: Context) :ViewModel() {
 
     var checkedall by mutableStateOf(false)
 
+    var contadorusuarios by mutableStateOf(3)
+
 
 
     fun onConvert() {
@@ -64,6 +67,30 @@ class LoginViewModel(val context: Context) :ViewModel() {
 
 
         banderapassword = !banderapassword
+    }
+
+
+    fun comprobarcontraseñaentrelalista(usuario:String, password:String, context: Context ):Boolean{
+        var acceso by mutableStateOf(false)
+
+        listausuarios.forEach{
+            user ->
+            if(user.usuario== usuario && user.contraseña== password){
+                acceso= true
+                Toast.makeText(context, "Contraseña correcta", Toast.LENGTH_SHORT).show()
+
+            }
+
+
+        }
+
+        Toast.makeText(context, "Contraseña incorrecta le quedan $contadorusuarios intentos", Toast.LENGTH_SHORT).show()
+        contadorusuarios--
+        if(contadorusuarios==0){
+            Toast.makeText(context, "No le quedan intentos", Toast.LENGTH_SHORT).show()
+        }
+
+return acceso
     }
 
 

@@ -50,6 +50,7 @@ import androidx.navigation.NavController
 import com.example.ex_terceraev.ui.Data.Producto
 import com.example.ex_terceraev.ui.Navigation.Screens
 import androidx.compose.material3.*
+import com.example.ex_terceraev.ui.viewmodel.ProductoViewModel
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -66,7 +67,7 @@ fun presupuesto(viewmodel: ProductoViewModel) {
 
 
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().padding(bottom=50.dp),
             contentPadding = PaddingValues(bottom = 8.dp),
             state = scrollState
         ) {
@@ -109,7 +110,7 @@ fun checkboxproductos(producto: Producto, viewModelproducto: ProductoViewModel) 
                     viewModelproducto.añadircontador()
                 }else{
                     viewModelproducto.restarproducto(producto)
-                    viewModelproducto.añadircontador()
+                    viewModelproducto.restarcontador()
 
                 }
             }
@@ -124,14 +125,16 @@ fun checkboxproductos(producto: Producto, viewModelproducto: ProductoViewModel) 
             }
             Spacer(modifier = Modifier.weight(1f))
             IconButton(onClick = { viewModelproducto.restarcontador()
-            viewModelproducto.decrementarContador(producto)}) {
+            viewModelproducto.decrementarContador(producto)
+            viewModelproducto.borrarproductos(producto)}) {
                 Icon(Icons.Default.Delete, contentDescription = null, tint = Color.Black)
             }
 
 
             Spacer(modifier = Modifier.weight(1f))
             IconButton(onClick = { viewModelproducto.añadircontador()
-            viewModelproducto.incrementarContador(producto)}) {
+            viewModelproducto.incrementarContador(producto)
+            viewModelproducto.añadirproducto(producto)}) {
                 Icon(Icons.Default.Add, contentDescription = null, tint = Color.Black)
             }
 
@@ -167,10 +170,12 @@ fun scaffold(viewModelproducto: ProductoViewModel, navController: NavController)
                             if(viewModelproducto.checkall){
                                 viewModelproducto.seleccionartodosloscheck(viewModelproducto.productos)
 
+
                                  println(viewModelproducto.checkall)
 
                             }else{
                                 viewModelproducto.cleartodosloscheck()
+
                                 println(viewModelproducto.checkall)
                             }
 

@@ -25,6 +25,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.ex_terceraev.ui.Data.Usuario
 import com.example.ex_terceraev.ui.Navigation.Navigation
 import com.example.ex_terceraev.ui.Navigation.Screens
+import com.example.ex_terceraev.ui.viewmodel.LoginViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,8 +50,11 @@ fun login (navController: NavController,viewModel: LoginViewModel){
 
         Spacer (modifier = Modifier.padding(10.dp))
 
-        Button(onClick = {if(viewModel.comprobarcontraseña(viewModel.password, context)){
-            navController.navigate(route= Screens.paginaprincipal.route)
+        Button(onClick = {if(viewModel.comprobarcontraseñaentrelalista(viewModel.usuario, viewModel.password, context)
+
+            ){
+           // navController.navigate(route= Screens.listadoitems.route)
+            navController.navigate(route = Screens.paginaprincipal.route)
 
         }
                                                                                         }

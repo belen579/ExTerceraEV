@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.ex_terceraev.ui.Data.Usuario
 import com.example.ex_terceraev.ui.Navigation.Screens
+import com.example.ex_terceraev.ui.viewmodel.LoginViewModel
 
 @Composable
 fun loginlistado(viewModel: LoginViewModel) {
@@ -163,12 +164,6 @@ fun checkboxusuario(usuario: Usuario, viewModel: LoginViewModel) {
                 }else{
                     viewModel.toggleSeleccion(usuario)
                 }
-
-
-
-
-
-
             }
 
 

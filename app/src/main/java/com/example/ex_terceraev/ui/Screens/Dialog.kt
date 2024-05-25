@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.example.ex_terceraev.ui.Data.Usuario
 import com.example.ex_terceraev.ui.Navigation.Screens
+import com.example.ex_terceraev.ui.viewmodel.LoginViewModel
 
 @Composable
 fun GuardarUsuarioButton(viewModel: LoginViewModel, navController: NavController) {
