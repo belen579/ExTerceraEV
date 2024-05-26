@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -38,6 +39,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -62,10 +64,11 @@ fun items(viewModel: ProductoViewModel, navigation: NavController, viewModellogi
     val context = LocalContext.current
 
     Scaffold(
-        topBar={
-            TopAppBar(title = { "Productos" }, colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor= MaterialTheme.colorScheme.primary),
-                actions= {
-                    IconButton(onClick = {  navigation.navigate(route = Screens.portada.route) }) {
+        topBar = {
+            TopAppBar(title = { "Productos" },
+                colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
+                actions = {
+                    IconButton(onClick = { navigation.navigate(route = Screens.portada.route) }) {
                         //  navController.navigate(route= Screens.confirmacion.route)}) {
                         Icon(Icons.Default.Refresh, contentDescription = null, tint = Color.Black)
                     }
@@ -96,8 +99,7 @@ fun items(viewModel: ProductoViewModel, navigation: NavController, viewModellogi
                 }
 
 
-
-                )
+            )
 
 
         }, bottomBar = {
@@ -115,23 +117,22 @@ fun items(viewModel: ProductoViewModel, navigation: NavController, viewModellogi
         }
 
 
-
-
-
     ) {
         Column(
 
-            modifier= Modifier.padding(top=50.dp)
+            modifier = Modifier.padding(top = 50.dp)
 
         ) {
-            OutlinedTextField(value = viewModel.nombre,
-                onValueChange = { viewModel.setnombre(it)},
+            OutlinedTextField(
+                value = viewModel.nombre,
+                onValueChange = { viewModel.setnombre(it) },
                 label = { Text("Nombre de item") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(5.dp)
             )
-            OutlinedTextField(value = viewModel.precio.toString(),
+            OutlinedTextField(
+                value = viewModel.precio.toString(),
                 onValueChange = { viewModel.setprecio(it) },
                 label = { Text("Precio") },
                 modifier = Modifier
@@ -140,8 +141,22 @@ fun items(viewModel: ProductoViewModel, navigation: NavController, viewModellogi
             )
             Button(onClick = {
 
-                viewModel.añadirproducto(Producto(viewModel.nombre, viewModel.precio, viewModel.seleccion, viewModel.numerodeproductos))
-                viewModel.guardarProducto( Producto(viewModel.nombre, viewModel.precio, viewModel.seleccion, viewModel.numerodeproductos),context)
+                viewModel.añadirproducto(
+                    Producto(
+                        viewModel.nombre,
+                        viewModel.precio,
+                        viewModel.seleccion,
+                        viewModel.numerodeproductos
+                    )
+                )
+                viewModel.guardarProducto(
+                    Producto(
+                        viewModel.nombre,
+                        viewModel.precio,
+                        viewModel.seleccion,
+                        viewModel.numerodeproductos
+                    ), context
+                )
 
                 viewModel.guardarProductos(viewModel.productos, context)
 
@@ -152,7 +167,7 @@ fun items(viewModel: ProductoViewModel, navigation: NavController, viewModellogi
 
 
             }, modifier = Modifier.padding(5.dp)) {
-                Text(text = "Agregar", /*modifier = Modifier.fillMaxWidth()*/)
+                Text(text = "Agregar" /*modifier = Modifier.fillMaxWidth()*/)
             }
 
 
@@ -169,9 +184,9 @@ fun items(viewModel: ProductoViewModel, navigation: NavController, viewModellogi
                 state = scrollState
             ) {
                 items(viewModel.productos) {
-                    listaitems( viewModel,producto=it,
-                        editarnombre = {viewModel.setnombre(it)},
-                        editarprecio = {viewModel.setprecio(it)}
+                    listaitems(viewModel, producto = it,
+                        editarnombre = { viewModel.setnombre(it) },
+                        editarprecio = { viewModel.setprecio(it) }
 
 
                     )
@@ -185,42 +200,71 @@ fun items(viewModel: ProductoViewModel, navigation: NavController, viewModellogi
     }
 
 
-
-
-
 }
 
 
 @Composable
-fun listaitems(viewModel: ProductoViewModel, producto: Producto, editarnombre:(String)-> Unit, editarprecio:(String ) -> Unit){
-    var checkedstate by rememberSaveable { mutableStateOf(viewModel.listaproductoseleccionado.contains(producto)) }
+fun listaitems(
+    viewModel: ProductoViewModel,
+    producto: Producto,
+    editarnombre: (String) -> Unit,
+    editarprecio: (String) -> Unit
+) {
+    var checkedstate by rememberSaveable {
+        mutableStateOf(
+            viewModel.listaproductoseleccionado.contains(
+                producto
+            )
+        )
+    }
     val context = LocalContext.current
+    val viewModellogin = LoginViewModel(context)
+    val showDialog = remember { mutableStateOf(false) }
 
-    Card (modifier = Modifier
-        .padding(8.dp)
-        .fillMaxWidth(),
+
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth(),
         shape = RoundedCornerShape(8.dp)
-    ){
+    ) {
 
-        Row(verticalAlignment = Alignment.CenterVertically,
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .padding(16.dp)
-                .fillMaxWidth()){
+                .fillMaxWidth()
+        ) {
 
-            Checkbox(checked =checkedstate , onCheckedChange ={
+            if(showDialog.value){
+                ShowAlertDialog(
+                    title = "Confirmación",
+                    message = "¿Está seguro de eliminar el registro?",
+                    onConfirm = {
+                        viewModel.borrarproductos(producto)
+                        showDialog.value = false
+
+                    },
+                    onDismiss = {
+                        Toast.makeText(context, "Operación Cancelada", Toast.LENGTH_SHORT).show()
+                        showDialog.value = false
+                    }
+                )
+            }
+
+            Checkbox(checked = checkedstate, onCheckedChange = {
                 checkedstate = it
 
-                if(checkedstate){
-                    viewModel.sumarproducto(producto)
+                if (checkedstate) {
+                    //   viewModel.sumarproducto(producto)
                     viewModel.añadircontador()
 
-                }else{
-                    viewModel.restarproducto(producto)
+                } else {
+                    //    viewModel.restarproducto(producto)
                     viewModel.restarcontador()
 
                 }
             }
-
 
 
             )
@@ -230,40 +274,76 @@ fun listaitems(viewModel: ProductoViewModel, producto: Producto, editarnombre:(S
 
             }
             Spacer(modifier = Modifier.weight(1f))
-            Image(painter = painterResource(id= R.drawable.ic_delete), contentDescription = "", modifier = Modifier.clickable {
-                Toast.makeText(context, " Ha clicado en eliminar", Toast.LENGTH_SHORT).show()
+            Image(
+                painter = painterResource(id = R.drawable.ic_delete),
+                contentDescription = "",
+                modifier = Modifier.clickable {
+                    Toast.makeText(context, " Ha clicado en eliminar", Toast.LENGTH_SHORT).show()
+                   showDialog.value = true
 
-            })
+
+                })
             IconButton(onClick = { /*viewModel.restarcontador()
                 viewModel.decrementarContador(producto)*/
                 viewModel.borrarproductos(producto)
-            viewModel.eliminarProducto(producto.nombre, context)}) {
+                viewModel.eliminarProducto(producto.nombre, context)
+            }) {
                 Icon(Icons.Default.Delete, contentDescription = null, tint = Color.Black)
             }
-            Image(painter =painterResource(id= android.R.drawable.ic_menu_edit), contentDescription = "", modifier = Modifier.clickable {
-                Toast.makeText(context, " Ha clicado en Editar", Toast.LENGTH_SHORT).show()
+            Image(
+                painter = painterResource(id = android.R.drawable.ic_menu_edit),
+                contentDescription = "",
+                modifier = Modifier.clickable {
+                    Toast.makeText(context, " Ha clicado en Editar", Toast.LENGTH_SHORT).show()
 
-            })
+                })
 
 
             Spacer(modifier = Modifier.weight(1f))
             IconButton(onClick = { //viewModel.añadircontador()
-               // viewModel.incrementarContador(producto)
+                // viewModel.incrementarContador(producto)
                 editarnombre(producto.nombre)
                 editarprecio(producto.precio.toString())
                 viewModel.borrarproductos(producto)
                 viewModel.eliminarProducto(producto.nombre, context)
 
 
-
-               }) {
+            }) {
                 Icon(Icons.Default.Edit, contentDescription = null, tint = Color.Black)
             }
 
         }
 
 
+    }
+}
 
+@Composable
+fun ShowAlertDialog(title: String, message: String, onConfirm: () -> Unit, onDismiss: () -> Unit) {
+    val openDialog = remember { mutableStateOf(true) }
+
+    if (openDialog.value) {
+        AlertDialog(
+            onDismissRequest = { openDialog.value = false },
+            title = { Text(text = title) },
+            text = { Text(text = message) },
+            confirmButton = {
+                Button(onClick = {
+                    openDialog.value = false
+                    onConfirm()
+                }) {
+                    Text("Sí")
+                }
+            },
+            dismissButton = {
+                Button(onClick = {
+                    openDialog.value = false
+                    onDismiss()
+                }) {
+                    Text("No")
+                }
+            }
+        )
     }
 }
 

@@ -101,25 +101,25 @@ class ProductoViewModel: ViewModel() {
     }*/
 
 
-    fun sumarproducto(producto: Producto) {
+   /* fun sumarproducto(producto: Producto) {
 
         total += producto.precio.toDouble();
 
 
-    }
+    }*/
 
-    fun restarproducto(producto: Producto) {
+ /*   fun restarproducto(producto: Producto) {
 
         total -= producto.precio.toDouble();
 
 
-    }
+    }*/
 
 
     fun seleccionartodosloscheck(productos: List<Producto>) {
 
         listaproductoseleccionado.addAll(productos)
-        total = listaproductoseleccionado.sumOf { it.precio.toDouble() }
+      //  total = listaproductoseleccionado.sumOf { it.precio.toDouble() }
         contador = listaproductoseleccionado.size
         println(listaproductoseleccionado.joinToString())
         checkall = true
@@ -129,7 +129,7 @@ class ProductoViewModel: ViewModel() {
     fun cleartodosloscheck() {
 
         listaproductoseleccionado.removeAll(productos)
-        total = 0.0
+      //  total = 0.0
         contador = listaproductoseleccionado.size
         println(listaproductoseleccionado.joinToString())
         checkall = false

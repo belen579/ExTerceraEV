@@ -106,10 +106,10 @@ fun checkboxproductos(producto: Producto, viewModelproducto: ProductoViewModel) 
                 checkedstate = it
 
                 if(checkedstate){
-                    viewModelproducto.sumarproducto(producto)
+                   // viewModelproducto.sumarproducto(producto)
                     viewModelproducto.añadircontador()
                 }else{
-                    viewModelproducto.restarproducto(producto)
+                  //  viewModelproducto.restarproducto(producto)
                     viewModelproducto.restarcontador()
 
                 }
