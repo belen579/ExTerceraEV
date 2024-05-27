@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -52,7 +53,7 @@ import com.example.ex_terceraev.ui.Navigation.Screens
 import com.example.ex_terceraev.ui.viewmodel.LoginViewModel
 
 @Composable
-fun loginlistado(viewModel: LoginViewModel) {
+fun loginlistado(viewModel: LoginViewModel, navigation: NavController) {
     var context = LocalContext.current
     val scrollState = rememberLazyListState()
 
@@ -97,6 +98,27 @@ fun loginlistado(viewModel: LoginViewModel) {
 
                 ) {
                     Text(text = "Acceder")
+                }
+
+                Box(modifier = Modifier
+                    .padding(top = 30.dp)
+                    .padding(start = 10.dp)
+                    .align(Alignment.Start)
+                    .clickable { viewModel.showpassword() }){
+                    Text(text = "Ver contraseña")
+                }
+
+                Box(modifier = Modifier
+                    .padding(top = 30.dp)
+                    .padding(end = 40.dp)
+                    .align(Alignment.End)
+                    .clickable {
+                        navigation.navigate(route= Screens.registro.route)
+                        //  viewModel.Guardarusuario(
+                        //    Usuario(viewModel.usuario, viewModel.password)
+                        //  )
+                    }){
+                    Text(text = "Registrarse")
                 }
 
             }
@@ -271,7 +293,7 @@ fun presentacionScafold(viewModel: LoginViewModel, navigation: NavController){
        }
 
    ) {
-       loginlistado(viewModel)
+       loginlistado(viewModel,navigation)
    }
 }
 

@@ -26,7 +26,7 @@ fun Navigation(){
     }//linea para recordar viewModel entre pantallas
     NavHost(navController, startDestination = Screens.portada.route) {
         //pantalla principal con la navegación
-        composable(route = Screens.portada.route) {login( navController,viewModel) }//Nombre del fichero .kt al que navegar
+        composable(route = Screens.portada.route) {login( navController, viewModel) }//Nombre del fichero .kt al que navegar
        composable(route = Screens.registro.route) {
             registrarse(navController,viewModel) //Nombre de la función composable a la que navegar
         }

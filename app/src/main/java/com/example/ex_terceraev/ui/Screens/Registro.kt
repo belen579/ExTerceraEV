@@ -61,7 +61,7 @@ fun registrarse(navController: NavController, viewModel: LoginViewModel){
                 viewModel.showDialog
 
 
-                navController.navigate(route = Screens.portada.route)
+                navController.navigate(route = Screens.paginaprincipal.route)
 
 
             }
