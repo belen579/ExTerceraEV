@@ -108,7 +108,7 @@ fun items(viewModel: ProductoViewModel, navigation: NavController, viewModellogi
                 tonalElevation = 10.dp
             ) {
                 Text(
-                    text = "Items ${viewModel.numerodeproductos}  Items Seleccionados {${viewModel.contador}}",
+                    text = "Items ${viewModel.numerodeproductos}  Items Seleccionados ${viewModel.contador}",
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.padding(horizontal = 16.dp)
